@@ -1,10 +1,30 @@
 import csv
-with open("acme_worksheet.csv", newline='') as csvfile:
-    reader = csv.DictReader(csvfile, delimiter=",")
+start_array = []
+with open('acme_worksheet.csv', newline='') as file:
+    reader = csv.reader(file)
     for row in reader:
-        print(row['Employee Name'], '|', row['Date'], row['Work Hours'])
-with open("new_file.csv", 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile, delimiter=",")
-    writer.writerow(["row 1 el 1", "row 1 el 2", "row 1 el 3"])
-    writer.writerow(["row 2 el 1", "row 2 el 2", "row 2 el 3"])
-    writer.writerow(["row 3 el 1", "row 3 el 2", "row 3 el 3"])
+        start_array.append(row)
+start_array = start_array[1:]
+
+names = []
+dates = []
+for info in start_array:
+    if info[1] == start_array[0][1]:
+        names.append(info[0])
+    dates.append(info[1])
+dates = list(set(dates))
+
+end_array = [["Name/Date"] + dates]
+
+for name in names:
+    list = [name]
+    for date in dates:
+        for info in start_array:
+            if name == info[0] and date == info[1]:
+                list.append(info[2])
+
+    end_array.append(list)
+
+with open('turboProjectKKG.csv', 'w', encoding='UTF8', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerows(end_array)
